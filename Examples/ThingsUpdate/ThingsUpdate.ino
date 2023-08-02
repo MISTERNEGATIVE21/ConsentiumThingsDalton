@@ -1,6 +1,6 @@
 /***************************************************
   This is Consentium Inc's IoT library
-  ----> http://consentiuminc.online/
+  ----> https://consentiuminc.onrender.com/
   Check out the links above for our tutorials and product diagrams.
 
   This Consentium Inc's IoT library works only for 3.3v tolerant ESP8266/ESP32 Edge boards.  
