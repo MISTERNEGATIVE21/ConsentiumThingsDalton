@@ -6,12 +6,9 @@
 WiFiClientSecure client;
 HTTPClient http;
 
-const int kselect_lines[4] = {S_0, S_1, S_2, S_3}; // MUX select lines
+const int kselect_lines[SELECT_LINES] = {S_0, S_1, S_2, S_3}; // MUX select lines
 
-const int MAX_JSON_SIZE = 200;
-const int MAX_JSON_SENSOR_DATA_SIZE = 50;
-
-const int kMUXtable[16][4] = {
+const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
   {0, 0, 0, 0}, {1, 0, 0, 0}, {0, 1, 0, 0}, {1, 1, 0, 0},
   {0, 0, 1, 0}, {1, 0, 1, 0}, {0, 1, 1, 0}, {1, 1, 1, 0},
   {0, 0, 0, 1}, {1, 0, 0, 1}, {0, 1, 0, 1}, {1, 1, 0, 1},
@@ -21,14 +18,14 @@ const int kMUXtable[16][4] = {
 ConsentiumThings::ConsentiumThings() {}
 
 void ConsentiumThings::begin() {
-  Serial.begin(EspBaud);
+  Serial.begin(ESPBAUD);
   #ifdef ESP32
     client.setCACert(consentium_root_ca);
   #elif ESP8266
     client.setInsecure();
     client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
   #endif
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
   }
 }
@@ -36,7 +33,7 @@ void ConsentiumThings::begin() {
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(WIFI_DELAY);
     Serial.print(".");
   }
   Serial.println("");
@@ -45,10 +42,10 @@ void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
 }
 
 float ConsentiumThings::busRead(int j, float threshold) {
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < SELECT_LINES; i++) {
     digitalWrite(kselect_lines[i], kMUXtable[j][i]);
   }
-  return analogRead(A0) * threshold;
+  return analogRead(ADC_IN) * threshold;
 }
 
 void ConsentiumThings::sendREST(const char* key, const char* board_id, float sensor_data[], String sensor_info[], int sensor_num, int precision) {
@@ -59,7 +56,7 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, float sen
 
   // create the server URL
   String serverUrl = String(server_url);
-  serverUrl.reserve(100);
+  serverUrl.reserve(ARRAY_RESERVE);
   serverUrl.concat("key=");
   serverUrl.concat(String(key));
   serverUrl.concat("&boardkey=");
@@ -89,15 +86,16 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, float sen
 
   // Make the POST request
   int httpCode = http.sendRequest("POST", jsonString);
-
+  
   // Check for errors
   if (httpCode > 0) {
     if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_CREATED) {
       String response = http.getString();
-      String combinedOutput = "Server response: " + response + "\nRespose code: " + String(httpCode) + "\nData packet: " + jsonString;
+      String combinedOutput = "Server response: " + response + "\nRespose code: " + String(httpCode) + "\nData packet: " + jsonString + "\n";
       Serial.println(combinedOutput);
     }
-  } else {
+  } 
+  else {
     Serial.println("HTTP POST request failed.");
   }
   // Close the HTTP connection
