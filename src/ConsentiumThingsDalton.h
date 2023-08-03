@@ -3,16 +3,23 @@
 
 #include <Arduino.h>  
 
-#ifdef ESP8266
+#ifdef ESP32
+    #include <WiFi.h>
+    #include <HTTPClient.h> 
+
+    #define S_0 14 
+    #define S_1 12
+    #define S_2 13
+    #define S_3 15  
+#elif ESP8266
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
     #include <WiFiClientSecure.h>
-    #define NETWRK_LED 16       
-#endif
-#ifdef ESP32
-    #include <WiFi.h>
-    #include <HTTPClient.h>  
-    #define NETWRK_LED 2
+
+    #define S_0 14 
+    #define S_1 12
+    #define S_2 13
+    #define S_3 15       
 #endif
 
 #define THRES_5 4.8828

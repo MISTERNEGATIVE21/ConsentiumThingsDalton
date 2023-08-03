@@ -1,3 +1,6 @@
+
+const char* server_url = "https://consentiuminc.onrender.com/api/board/updatedata/?";
+
 const char* consentium_root_ca = \
 "-----BEGIN CERTIFICATE-----\n" \
 "MIIDzTCCArWgAwIBAgIQCjeHZF5ftIwiTv0b7RQMPDANBgkqhkiG9w0BAQsFADBa\n" \
