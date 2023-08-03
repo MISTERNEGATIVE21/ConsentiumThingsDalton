@@ -16,7 +16,7 @@ ConsentiumThings board;   // create ConsentiumThing object
 
 const char *ssid = ""; // add WiFi SSID
 const char *pass = ""; // add WiFi password
-const long interval = 5; // take 5 seconds of delay 
+const long interval = 7; // take 7 seconds of delay 
 const char *key = "";       // Write api key
 const char *board_key = ""; // Board api key
 
