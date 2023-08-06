@@ -1,5 +1,5 @@
 
-const char* server_url = "https://consentiuminc.onrender.com/api/board/updatedata/?";
+const char* server_url = "https://consentiuminc.online/api/board/updatedata/?";
 
 const char* consentium_root_ca = \
 "-----BEGIN CERTIFICATE-----\n" \
