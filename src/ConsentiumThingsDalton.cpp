@@ -20,10 +20,11 @@ ConsentiumThings::ConsentiumThings() {}
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
   #ifdef ESP32
-    client.setCACert(consentium_root_ca);
+    client.setInsecure();
+    //client.setCACert(consentium_root_ca);
   #elif ESP8266
     client.setInsecure();
-    client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
+    //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
   #endif
   for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
