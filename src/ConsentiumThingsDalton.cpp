@@ -1,7 +1,7 @@
 #include <ArduinoJson.h>
 
-#include "ConsentiumThingsDalton.h"
-#include "consentium_essentials.h"
+#include <ConsentiumThingsDalton.h>
+#include <certs/consentium_essentials.h>
 
 WiFiClientSecure client;
 HTTPClient http;
@@ -20,8 +20,8 @@ ConsentiumThings::ConsentiumThings() {}
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
   #ifdef ESP32
-    client.setInsecure();
-    //client.setCACert(consentium_root_ca);
+    //client.setInsecure();
+    client.setCACert(consentium_root_ca);
   #elif ESP8266
     client.setInsecure();
     //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
@@ -32,6 +32,7 @@ void ConsentiumThings::begin() {
 }
 
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(WIFI_DELAY);
