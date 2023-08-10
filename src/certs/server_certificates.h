@@ -1,6 +1,3 @@
-
-const char* server_url = "https://consentiuminc.online/api/board/updatedata/?";
-
 // const char* consentium_root_ca = \
 // "-----BEGIN CERTIFICATE-----\n" \
 // "MIIERDCCAyygAwIBAgISA/KuXdYkBk8NoqZHazIHP9e0MA0GCSqGSIb3DQEBCwUA\n" \
