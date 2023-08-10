@@ -11,6 +11,7 @@
     #define S_1 12
     #define S_2 13
     #define S_3 15  
+    #define ADC_IN A0
 #elif ESP8266
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
@@ -19,7 +20,8 @@
     #define S_0 14 
     #define S_1 12
     #define S_2 13
-    #define S_3 15       
+    #define S_3 15  
+    #define ADC_IN A0     
 #endif
 
 #define SELECT_LINES 4
@@ -32,7 +34,6 @@
 
 #define ARRAY_RESERVE 100
 
-#define ADC_IN A0
 
 #define THRES_5 4.8828
 #define THRES_3 3.2226

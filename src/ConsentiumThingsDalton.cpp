@@ -20,8 +20,10 @@ ConsentiumThings::ConsentiumThings() {}
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
   #ifdef ESP32
-    //client.setInsecure();
-    client.setCACert(consentium_root_ca);
+    client.setInsecure();
+    //client.setCACert(rootCACert);
+    //client.setCertificate(clientCert);
+    //client.setPrivateKey(privateKey);
   #elif ESP8266
     client.setInsecure();
     //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);

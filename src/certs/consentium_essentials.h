@@ -27,8 +27,7 @@ const char* server_url = "https://consentiuminc.online/api/board/updatedata/?";
 // "-----END CERTIFICATE-----\n" ;
 
 
-const char* consentium_root_ca = 
-R"EOF(
+const char* rootCACert = R"EOF(
 ----BEGIN CERTIFICATE-----
 MIIERDCCAyygAwIBAgISA/KuXdYkBk8NoqZHazIHP9e0MA0GCSqGSIb3DQEBCwUA
 MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
@@ -54,6 +53,9 @@ HID1CMBvdbtctIbhImJsKSsGJWxwVvXbwicy3nCAVAr7FRIwwAtLzsi8RJYAbisn
 Ssp824xkDE9a14wGpkZ+ZgjihbOjLvGqY7HbSiL65SmTkOEBjbSfMs4iE6cDjZFU
 eR39xTB6hBjUtEFfxpZokLD6mnNOm0CrnDRobhcMWlwBm0JV4IjLcg==
 -----END CERTIFICATE-----
+)EOF";
+
+const char* clientCert = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
 TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
@@ -84,6 +86,9 @@ HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
 MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
 nLRbwHOoq7hHwg==
 -----END CERTIFICATE-----
+)EOF";
+
+const char* privateKey = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
 TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
