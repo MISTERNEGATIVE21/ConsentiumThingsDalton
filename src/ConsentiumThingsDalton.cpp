@@ -1,5 +1,4 @@
 #include <ArduinoJson.h>
-
 #include <ConsentiumThingsDalton.h>
 #include <certs/consentium_essentials.h>
 
@@ -19,15 +18,7 @@ ConsentiumThings::ConsentiumThings() {}
 
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
-  #ifdef ESP32
-    client.setInsecure();
-    //client.setCACert(rootCACert);
-    //client.setCertificate(clientCert);
-    //client.setPrivateKey(privateKey);
-  #elif ESP8266
-    client.setInsecure();
-    //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
-  #endif
+  client.setInsecure(); // change with root_ca certificate
   for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
   }
