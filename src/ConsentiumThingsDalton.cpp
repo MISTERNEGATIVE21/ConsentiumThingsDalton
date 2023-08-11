@@ -19,7 +19,13 @@ ConsentiumThings::ConsentiumThings() {}
 
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
-  client.setInsecure(); // change with root_ca certificate
+  #ifdef ESP32
+    client.setInsecure();
+    //client.setCACert(consentium_root_ca);
+  #elif ESP8266
+    client.setInsecure();
+    //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
+  #endif
   for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
   }
@@ -27,6 +33,10 @@ void ConsentiumThings::begin() {
 
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   WiFi.mode(WIFI_STA);
+  
+  Serial.print("Attempting to connect to SSID: ");
+  Serial.println(ssid);
+  
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(WIFI_DELAY);
