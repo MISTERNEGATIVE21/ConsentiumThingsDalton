@@ -54,7 +54,7 @@ float ConsentiumThings::busRead(int j, float threshold) {
   return analogRead(ADC_IN) * threshold;
 }
 
-void ConsentiumThings::sendREST(const char* key, const char* board_id, float sensor_data[], String sensor_info[], int sensor_num, int precision) {
+void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], String sensor_info[], int sensor_num, int precision) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected. Cannot send REST request.");
     return;

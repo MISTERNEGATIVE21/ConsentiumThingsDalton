@@ -42,14 +42,14 @@
 
 #define LOW_PRE 2
 #define MID_PRE 4
-#define HIGH_PRE 6
+#define HIGH_PRE 7
 
 class ConsentiumThings{
     public:
         ConsentiumThings();
         void begin();
         void initWiFi(const char*, const char*);
-        void sendREST(const char* , const char*, float [], String [], int, int); 
+        void sendREST(const char* , const char*, double [], String [], int, int); 
         float busRead(int, float);      
 };
 
