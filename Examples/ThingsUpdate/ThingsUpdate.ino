@@ -12,28 +12,29 @@
 
 #include <ConsentiumThingsDalton.h>
 
-ConsentiumThings board;   // create ConsentiumThing object
+ConsentiumThings board; // Create ConsentiumThings object
 
-const char *ssid = ""; // add WiFi SSID
-const char *pass = ""; // add WiFi password
-const long interval = 7; // take 7 seconds of delay 
-const char *key = "";       // Write api key
-const char *board_key = ""; // Board api key
+const char *ssid = "YOUR_WIFI_SSID"; // Add WiFi SSID
+const char *pass = "YOUR_WIFI_PASSWORD"; // Add WiFi password
+const long interval = 7000; // Wait for 7 seconds
+const char *key = "YOUR_API_KEY"; // Write API key
+const char *board_key = "YOUR_BOARD_API_KEY"; // Board API key
 
-void setup(){
-  board.begin();   // init. IoT boad
-  board.initWiFi(ssid, pass);  // begin WiFi connection
+void setup() {
+  board.begin(); // Initialize IoT board
+  board.initWiFi(ssid, pass); // Begin WiFi connection
 }
 
-void loop(){
-  float data_0 = board.busRead(0, THRES_5);  // read voltage data
-  
-  float sensor_val[] = {data_0};  // sensor data array
-  String info_buff[] = {"Temperature"}; // sensor info. array
-  
-  int sensor_num = sizeof(sensor_val)/sizeof(sensor_val[0]); // number of sensors connected 
-  
-  board.sendREST(key, board_key, sensor_val, info_buff, sensor_num, LOW_PRE); // send over REST with delay with desired prescision
+void loop() {
+  double data_0 = board.busRead(0, THRES_5); // Read voltage data as a double
 
-  delay(interval*1000);
+  double sensor_val[] = {data_0}; // Sensor data array of doubles
+  String info_buff[] = {"Temperature"}; // Sensor info array
+
+  int sensor_num = sizeof(sensor_val) / sizeof(sensor_val[0]); // Number of sensors connected
+
+  // Send data over REST with delay and desired precision
+  board.sendREST(key, board_key, sensor_val, info_buff, sensor_num, LOW_PRE);
+
+  delay(interval);
 }
