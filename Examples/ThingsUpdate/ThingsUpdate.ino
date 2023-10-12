@@ -25,16 +25,15 @@ void setup() {
   board.initWiFi(ssid, pass); // Begin WiFi connection
 }
 
-void loop() {
-  double data_0 = board.busRead(0, THRES_5); // Read voltage data as a double
-
-  double sensor_val[] = {data_0}; // Sensor data array of doubles
-  String info_buff[] = {"Temperature"}; // Sensor info array
-
-  int sensor_num = sizeof(sensor_val) / sizeof(sensor_val[0]); // Number of sensors connected
-
-  // Send data over REST with delay and desired precision
-  board.sendREST(key, board_key, sensor_val, info_buff, sensor_num, LOW_PRE);
+void loop(){
+  float data_0 = board.busRead(0, THRES_5);  // read voltage data
+  
+  float sensor_val[] = {data_0};  // sensor data array
+  String info_buff[] = {"Temperature"}; // sensor info. array
+  
+  int sensor_num = sizeof(sensor_val)/sizeof(sensor_val[0]); // number of sensors connected 
+  
+  board.sendREST(key, board_key, sensor_val, info_buff, sensor_num, LOW_PRE); // send over REST with delay with desired prescision
 
   delay(interval);
 }
