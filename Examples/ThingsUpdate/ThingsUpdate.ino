@@ -26,9 +26,9 @@ void setup(){
 }
 
 void loop(){
-  float data_0 = board.busRead(0, THRES_5);  // read voltage data
+  double data_0 = board.busRead(0, THRES_5);  // read voltage data
   
-  float sensor_val[] = {data_0};  // sensor data array
+  double sensor_val[] = {data_0};  // sensor data array
   String info_buff[] = {"Temperature"}; // sensor info. array
   
   int sensor_num = sizeof(sensor_val)/sizeof(sensor_val[0]); // number of sensors connected 
