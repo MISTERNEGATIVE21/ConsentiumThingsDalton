@@ -1,11 +1,11 @@
 /***************************************************
-  This is Consentium Inc's IoT library
+  This is Consentium's IoT library
   ----> https://consentiuminc.online/
   Check out the links above for our tutorials and product diagrams.
 
-  This Consentium Inc's IoT library works only for 3.3v tolerant ESP8266/ESP32 Edge boards.  
+  This Consentium's IoT library works only for 3.3v tolerant ESP8266/ESP32 Edge boards.  
  
-  Written by Debjyoti Chowdhury for Consentium Inc.
+  Written by Debjyoti Chowdhury for Consentium.
   MIT license, all text above must be included in any redistribution
  ****************************************************/
 
