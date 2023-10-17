@@ -1,10 +1,10 @@
 ## ConsentiumThingsDalton
 
-**Version:** v0.0.7
+**Version:** v0.0.8
 
 **Description:**
 
-This project provides a simple example of how to use the ConsentiumThingsDalton IoT board to read sensor data and send it over REST to the ConsentiumThings cloud.
+This project provides a simple example of how to use the ConsentiumThingsDalton IoT board to read sensor data and send it over HTTPS (only ESP32 supported) to the ConsentiumThings cloud.
 
 **How to use:**
 

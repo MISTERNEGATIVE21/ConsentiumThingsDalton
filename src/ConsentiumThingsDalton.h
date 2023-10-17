@@ -1,8 +1,6 @@
 #ifndef ConsentiumThingsDalton_h
 #define ConsentiumThingsDalton_h
 
-#include <Arduino.h>  
-
 #ifdef ESP32
     #include <WiFi.h>
     #include <HTTPClient.h> 
@@ -49,7 +47,7 @@ class ConsentiumThings{
         ConsentiumThings();
         void begin();
         void initWiFi(const char*, const char*);
-        void sendREST(const char* , const char*, double [], String [], int, int); 
+        void sendREST(const char* , const char*, double [], const char* [], int, int); 
         float busRead(int, float);      
 };
 

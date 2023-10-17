@@ -20,8 +20,7 @@ ConsentiumThings::ConsentiumThings() {}
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
   #ifdef ESP32
-    client.setInsecure();
-    //client.setCACert(consentium_root_ca);
+    client.setCACert(consentium_root_ca);
   #elif ESP8266
     client.setInsecure();
     //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
@@ -34,7 +33,7 @@ void ConsentiumThings::begin() {
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   WiFi.mode(WIFI_STA);
   
-  Serial.print("Attempting to connect to SSID: ");
+  Serial.print("Attempting to connect SSID: ");
   Serial.println(ssid);
   
   WiFi.begin(ssid, password);
@@ -54,7 +53,7 @@ float ConsentiumThings::busRead(int j, float threshold) {
   return analogRead(ADC_IN) * threshold;
 }
 
-void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], String sensor_info[], int sensor_num, int precision) {
+void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected. Cannot send REST request.");
     return;
@@ -97,7 +96,7 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, double se
   if (httpCode > 0) {
     if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_CREATED) {
       String response = http.getString();
-      String combinedOutput = "Server response: " + response + "\nRespose code: " + String(httpCode) + "\nData packet: " + jsonString + "\n";
+      String combinedOutput = "Server response: " + response + " with code: " + String(httpCode) + "\nData packet: " + jsonString + "\n";
       Serial.println(combinedOutput);
     }
   } 
