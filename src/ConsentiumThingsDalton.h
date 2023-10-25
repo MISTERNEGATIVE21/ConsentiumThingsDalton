@@ -5,11 +5,14 @@
     #include <WiFi.h>
     #include <HTTPClient.h> 
 
-    #define S_0 14 
-    #define S_1 12
-    #define S_2 13
-    #define S_3 15  
+    #define S_0 21
+    #define S_1 19
+    #define S_2 18
+    #define S_3 5    
     #define ADC_IN 34 // ADC1_CH6
+
+    #define ADC_VREF_mV    3300.0 // in millivolt
+    #define ADC_RESOLUTION 4096.0
 #elif ESP8266
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
@@ -19,7 +22,10 @@
     #define S_1 12
     #define S_2 13
     #define S_3 15  
-    #define ADC_IN A0 // A0     
+    #define ADC_IN A0 // A0
+
+    #define ADC_VREF_mV    3300.0 // in millivolt
+    #define ADC_RESOLUTION 1024.0     
 #endif
 
 #define SELECT_LINES 4
@@ -31,10 +37,6 @@
 #define MAX_JSON_SENSOR_DATA_SIZE 50
 
 #define ARRAY_RESERVE 100
-
-
-#define THRES_5 4.8828
-#define THRES_3 3.2226
 
 #define ESPBAUD 115200
 
@@ -48,7 +50,7 @@ class ConsentiumThings{
         void begin();
         void initWiFi(const char*, const char*);
         void sendREST(const char* , const char*, double [], const char* [], int, int); 
-        float busRead(int, float);      
+        float busRead(int);      
 };
 
 #endif

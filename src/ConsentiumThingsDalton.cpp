@@ -5,6 +5,7 @@
 
 WiFiClientSecure client;
 HTTPClient http;
+X509List cert(consentium_root_ca);
 
 const int kselect_lines[SELECT_LINES] = {S_0, S_1, S_2, S_3}; // MUX select lines
 
@@ -22,9 +23,18 @@ void ConsentiumThings::begin() {
   #ifdef ESP32
     client.setCACert(consentium_root_ca);
   #elif ESP8266
-    client.setInsecure();
-    //client.setCACert((const uint8_t*)consentium_root_ca, sizeof(consentium_root_ca) - 1);
+    configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+    Serial.print("Waiting for NTP time sync: ");
+    time_t now = time(nullptr);
+    while (now < 8 * 3600 * 2) {
+      delay(500);
+      now = time(nullptr);
+    }
+    struct tm timeinfo;
+    gmtime_r(&now, &timeinfo);   
+    client.setTrustAnchors(&cert);
   #endif
+
   for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
   }
@@ -46,11 +56,11 @@ void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   Serial.println(WiFi.localIP());
 }
 
-float ConsentiumThings::busRead(int j, float threshold) {
+float ConsentiumThings::busRead(int j) {
   for (int i = 0; i < SELECT_LINES; i++) {
     digitalWrite(kselect_lines[i], kMUXtable[j][i]);
   }
-  return analogRead(ADC_IN) * threshold;
+  return analogRead(ADC_IN);
 }
 
 void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
@@ -82,7 +92,7 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, double se
 
   // Serialize the JSON document to a string
   String jsonString;
-  serializeJson(jsonDocument, jsonString);
+  serializeJsonPretty(jsonDocument, jsonString);
 
   http.begin(client, serverUrl);
 
