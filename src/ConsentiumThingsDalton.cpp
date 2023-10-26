@@ -5,7 +5,10 @@
 
 WiFiClientSecure client;
 HTTPClient http;
-X509List cert(consentium_root_ca);
+
+#ifdef ESP8266
+  X509List cert(consentium_root_ca);
+#endif
 
 const int kselect_lines[SELECT_LINES] = {S_0, S_1, S_2, S_3}; // MUX select lines
 
@@ -18,20 +21,24 @@ const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
 
 ConsentiumThings::ConsentiumThings() {}
 
+void syncTime(){
+    configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+    Serial.print(F("Waiting for NTP time sync: "));
+    time_t now = time(nullptr);
+    while (now < NTP_SYNC_WAIT) {
+      delay(500);
+      now = time(nullptr);
+    }
+    struct tm timeinfo;
+    gmtime_r(&now, &timeinfo); 
+}
+
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
   #ifdef ESP32
     client.setCACert(consentium_root_ca);
   #elif ESP8266
-    configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-    Serial.print("Waiting for NTP time sync: ");
-    time_t now = time(nullptr);
-    while (now < 8 * 3600 * 2) {
-      delay(500);
-      now = time(nullptr);
-    }
-    struct tm timeinfo;
-    gmtime_r(&now, &timeinfo);   
+    syncTime();
     client.setTrustAnchors(&cert);
   #endif
 
@@ -43,7 +50,7 @@ void ConsentiumThings::begin() {
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   WiFi.mode(WIFI_STA);
   
-  Serial.print("Attempting to connect SSID: ");
+  Serial.print(F("Attempting to connect SSID: "));
   Serial.println(ssid);
   
   WiFi.begin(ssid, password);
@@ -52,7 +59,7 @@ void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
     Serial.print(".");
   }
   Serial.println("");
-  Serial.print("Got IP : ");
+  Serial.print(F("Got IP : "));
   Serial.println(WiFi.localIP());
 }
 
@@ -65,7 +72,7 @@ float ConsentiumThings::busRead(int j) {
 
 void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi not connected. Cannot send REST request.");
+    Serial.println(F("WiFi not connected. Cannot send REST request."));
     return;
   }
 
@@ -111,7 +118,7 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, double se
     }
   } 
   else {
-    Serial.println("HTTP POST request failed.");
+    Serial.println(F("HTTP POST request failed."));
   }
   // Close the HTTP connection
   http.end();

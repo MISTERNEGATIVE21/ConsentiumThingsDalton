@@ -26,7 +26,7 @@ void setup() {
 }
 
 void loop(){
-  double data_0 = board.busRead(0, THRES_5);  // read voltage data
+  double data_0 = board.busRead(0);  // read voltage data
   
   double sensorValues[] = {data_0};  // sensor data array
   const char* sensorInfo[] = {"Temperature"}; // sensor info. array

@@ -1,4 +1,4 @@
-const char* consentium_root_ca =R"EOF(
+const char consentium_root_ca [] PROGMEM =R"CERT(
 -----BEGIN CERTIFICATE-----
 MIICGzCCAaGgAwIBAgIQQdKd0XLq7qeAwSxs6S+HUjAKBggqhkjOPQQDAzBPMQsw
 CQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJuZXQgU2VjdXJpdHkgUmVzZWFyY2gg
@@ -52,4 +52,4 @@ BggqhkjOPQQDAwNoADBlAjEA1YfwoHkCCL7lhffFay0tQeLs7JoPZSGbyEqNsH6K
 9l0StEFS5dDMLE66RNr2DxZNAjBj+bo2LSU8NNKFOtHof3cNJrOFZEplivxRaLn+
 WHC2y0XRGmHLjcHv1NrrbxxvhMc=
 -----END CERTIFICATE-----
-)EOF";
+)CERT";

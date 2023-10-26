@@ -17,7 +17,7 @@
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
     #include <WiFiClientSecure.h>
-
+            
     #define S_0 14 
     #define S_1 12
     #define S_2 13
@@ -32,6 +32,8 @@
 #define MUX_IN_LINES 16
 
 #define WIFI_DELAY 500
+
+#define NTP_SYNC_WAIT 8 * 3600 * 2
 
 #define MAX_JSON_SIZE 200
 #define MAX_JSON_SENSOR_DATA_SIZE 50
