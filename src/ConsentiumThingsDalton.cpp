@@ -35,7 +35,7 @@ void syncTime(){
 
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
-  #ifdef ESP32
+  #if defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
     client.setCACert(consentium_root_ca);
   #elif ESP8266
     syncTime();
