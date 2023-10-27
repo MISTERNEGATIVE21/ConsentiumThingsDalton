@@ -1,6 +1,6 @@
 ## ConsentiumThingsDalton
 
-**Version:** v0.1.0
+**Version:** v0.1.1
 
 **Description:**
 
@@ -35,3 +35,11 @@ This project is licensed under the MIT License.
 **Contributing:**
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+# Licensing and Credits
+* The [Arduino IDE and ArduinoCore-API](https://arduino.cc) are developed and maintained by the Arduino team. The IDE is licensed under GPL.
+* The [RP2040 GCC-based toolchain](https://github.com/earlephilhower/pico-quick-toolchain) is licensed under under the GPL.
+* The [Pico-SDK](https://github.com/raspberrypi/pico-sdk) is by Raspberry Pi (Trading) Ltd and licensed under the BSD 3-Clause license.
+* The [ESP8266 Libraries] modified from ESP8266 Core Development Team: [GitHub](https://github.com/esp8266/Arduino)
+* The [ESP32 Libraries are part of Espressif Systems]: [Website](https://www.espressif.com/) ESP32 Arduino Core Development Team: [GitHub](https://github.com/espressif/arduino-esp32)
+  

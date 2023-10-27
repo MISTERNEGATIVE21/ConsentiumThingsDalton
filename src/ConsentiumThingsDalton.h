@@ -25,7 +25,18 @@
     #define ADC_IN A0 // A0
 
     #define ADC_VREF_mV    3300.0 // in millivolt
-    #define ADC_RESOLUTION 1024.0     
+    #define ADC_RESOLUTION 1024.0
+#elif ARDUINO_RASPBERRY_PI_PICO_W
+    #include <WiFi.h>
+    #include <HTTPClient.h>
+    #include <WiFiClientSecure.h>
+    #define S_0 6 
+    #define S_1 7
+    #define S_2 8
+    #define S_3 9  
+    #define ADC_IN 34 // ADC Channel 2
+    #define ADC_VREF_mV    3300.0 // in millivolt
+    #define ADC_RESOLUTION 4096.0  
 #endif
 
 #define SELECT_LINES 4
