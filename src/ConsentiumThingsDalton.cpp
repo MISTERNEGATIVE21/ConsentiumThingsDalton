@@ -6,7 +6,7 @@
 WiFiClientSecure client;
 HTTPClient http;
 
-#ifdef ESP8266
+#if defined(ESP8266)
   X509List cert(consentium_root_ca);
 #endif
 
@@ -35,9 +35,10 @@ void syncTime(){
 
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
+  
   #if defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
     client.setCACert(consentium_root_ca);
-  #elif ESP8266
+  #elif defined(ESP8266)
     syncTime();
     client.setTrustAnchors(&cert);
   #endif
