@@ -3,7 +3,9 @@
   ----> https://consentiuminc.online/
   Check out the links above for our tutorials and product diagrams.
 
-  This Consentium's IoT library works only for 3.3v tolerant ESP8266/ESP32 Edge boards.  
+  This Consentium's IoT library works only for ESP8266/ESP32/Raspberry Pi Pico W compatible Edge boards. 
+  
+  Connect an LED to GPIO 16 for ESP 8266, GPIO 23 for ESP 32 and GPIO 25 for Raspberry Pi Pico W to indicate the REST events. 
  
   Written by Debjyoti Chowdhury for Consentium.
   MIT license, all text above must be included in any redistribution

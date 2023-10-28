@@ -19,8 +19,6 @@ const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
   {0, 0, 1, 1}, {1, 0, 1, 1}, {0, 1, 1, 1}, {1, 1, 1, 1}
 };
 
-ConsentiumThings::ConsentiumThings() {}
-
 void syncTime(){
     configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
     Serial.print(F("Waiting for NTP time sync: "));
@@ -33,8 +31,17 @@ void syncTime(){
     gmtime_r(&now, &timeinfo); 
 }
 
+void toggleLED() {
+    static bool ledState = false;
+    digitalWrite(ledPin, ledState);
+    ledState = !ledState;
+}
+
+ConsentiumThings::ConsentiumThings() {}
+
 void ConsentiumThings::begin() {
   Serial.begin(ESPBAUD);
+  pinMode(ledPin, OUTPUT);
   
   #if defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
     client.setCACert(consentium_root_ca);
@@ -116,6 +123,7 @@ void ConsentiumThings::sendREST(const char* key, const char* board_id, double se
       String response = http.getString();
       String combinedOutput = "Server response: " + response + " with code: " + String(httpCode) + "\nData packet: " + jsonString + "\n";
       Serial.println(combinedOutput);
+      toggleLED();
     }
   } 
   else {

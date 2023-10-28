@@ -5,6 +5,8 @@
     #include <WiFi.h>
     #include <HTTPClient.h> 
 
+    #define ledPin 23
+
     #define S_0 21
     #define S_1 19
     #define S_2 18
@@ -17,6 +19,8 @@
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
     #include <WiFiClientSecure.h>
+
+    #define ledPin 16
             
     #define S_0 14 
     #define S_1 12
@@ -30,13 +34,18 @@
     #include <WiFi.h>
     #include <HTTPClient.h>
     #include <WiFiClientSecure.h>
+    
+    #define ledPin LED_BUILTIN
+
     #define S_0 6 
     #define S_1 7
     #define S_2 8
-    #define S_3 9  
+    #define S_3 9
+
     #define ADC_IN 26 // ADC0
     #define ADC_VREF_mV    3300.0 // in millivolt
-    
+#endif
+
 #define SELECT_LINES 4
 #define MUX_IN_LINES 16
 

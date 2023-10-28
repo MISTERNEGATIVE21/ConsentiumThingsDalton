@@ -1,6 +1,6 @@
 ## ConsentiumThingsDalton
 
-**Version:** v0.1.3
+**Version:** v0.1.4
 
 **Description:**
 
@@ -23,7 +23,7 @@ This project provides a simple example of how to use the ConsentiumThingsDalton 
 * You can change the sampling interval by changing the `interval` variable.
 * You can change the precision of the data sent over REST by changing the `pre` variable.
 * You can add additional sensors to the board by connecting them to the appropriate pins and updating the `sensorCount` variable and the `sensorValues` and `sensorInfo` arrays.
-
+* You can connect an LED to GPIO 16 for ESP 8266, GPIO 23 for ESP 32 and GPIO 25 for Raspberry Pi Pico W to indicate the REST events.
 **License:**
 
 This project is licensed under the MIT License.
