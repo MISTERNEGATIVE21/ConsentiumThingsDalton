@@ -36,9 +36,7 @@
     #define S_3 9  
     #define ADC_IN 26 // ADC0
     #define ADC_VREF_mV    3300.0 // in millivolt
-    #define ADC_RESOLUTION 4096.0
-#endif
-
+    
 #define SELECT_LINES 4
 #define MUX_IN_LINES 16
 
