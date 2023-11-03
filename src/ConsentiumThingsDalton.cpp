@@ -1,7 +1,6 @@
-#include <ArduinoJson.h>
 #include <ConsentiumThingsDalton.h>
-#include <certs/server_certificates.h>
-#include <utils/consentium_essentials.h>
+#include <certs/ServerCertificates.h>
+#include <utils/ConsentiumEssentials.h>
 
 WiFiClientSecure client;
 HTTPClient http;
