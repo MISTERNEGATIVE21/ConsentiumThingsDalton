@@ -39,10 +39,10 @@
     
     #define ledPin LED_BUILTIN
 
-    #define S_0 6 
-    #define S_1 7
-    #define S_2 8
-    #define S_3 9
+    #define S_0 18 
+    #define S_1 19
+    #define S_2 20
+    #define S_3 21
 
     #define ADC_IN 26 // ADC0
     #define ADC_VREF_mV    3300.0 // in millivolt
@@ -69,9 +69,9 @@
 class ConsentiumThings{
     public:
         ConsentiumThings();
-        void begin();
+        void begin(const char*, const char*);
         void initWiFi(const char*, const char*);
-        void sendREST(const char* , const char*, double [], const char* [], int, int); 
+        void sendREST(double [], const char* [], int, int); 
         float busRead(int);      
 };
 

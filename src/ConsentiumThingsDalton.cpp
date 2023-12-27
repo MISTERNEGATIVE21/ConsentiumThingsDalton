@@ -5,6 +5,8 @@
 WiFiClientSecure client;
 HTTPClient http;
 
+String serverUrl = String(server_url);
+
 #if defined(ESP8266)
   X509List cert(consentium_root_ca);
 #endif
@@ -38,7 +40,7 @@ void toggleLED() {
 
 ConsentiumThings::ConsentiumThings() {}
 
-void ConsentiumThings::begin() {
+void ConsentiumThings::begin(const char* key, const char* board_id) {
   Serial.begin(ESPBAUD);
   pinMode(ledPin, OUTPUT);
   
@@ -48,6 +50,13 @@ void ConsentiumThings::begin() {
     syncTime();
     client.setTrustAnchors(&cert);
   #endif
+
+  // create the server URL
+  serverUrl.reserve(ARRAY_RESERVE);
+  serverUrl.concat("key=");
+  serverUrl.concat(String(key));
+  serverUrl.concat("&boardkey=");
+  serverUrl.concat(String(board_id));
 
   for (int i = 0; i < SELECT_LINES; i++) {
     pinMode(kselect_lines[i], OUTPUT);
@@ -77,19 +86,12 @@ float ConsentiumThings::busRead(int j) {
   return analogRead(ADC_IN);
 }
 
-void ConsentiumThings::sendREST(const char* key, const char* board_id, double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
+void ConsentiumThings::sendREST(double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println(F("WiFi not connected. Cannot send REST request."));
     return;
   }
 
-  // create the server URL
-  String serverUrl = String(server_url);
-  serverUrl.reserve(ARRAY_RESERVE);
-  serverUrl.concat("key=");
-  serverUrl.concat(String(key));
-  serverUrl.concat("&boardkey=");
-  serverUrl.concat(String(board_id));
 
   DynamicJsonDocument jsonDocument(MAX_JSON_SIZE + sensor_num * MAX_JSON_SENSOR_DATA_SIZE);
 

@@ -25,7 +25,7 @@ const char *ApiKey = "YOUR_API_KEY"; // Write API key
 const char *BoardApiKey = "YOUR_BOARD_API_KEY"; // Board API key
 
 void setup() {
-  board.begin(); // Initialize IoT board
+  board.begin(ApiKey, BoardApiKey); // Initialize IoT board
   board.initWiFi(ssid, pass); // Begin WiFi connection
 }
 
@@ -37,7 +37,7 @@ void loop(){
   
   int sensorCount = sizeof(sensorValues)/sizeof(sensorValues[0]); // number of sensors connected 
   
-  board.sendREST(ApiKey, BoardApiKey, sensorValues, sensorInfo, sensorCount, LOW_PRE); // send over REST with delay with desired prescision
+  board.sendREST(sensorValues, sensorInfo, sensorCount, LOW_PRE); // send over REST with delay with desired prescision
 
   delay(interval);
 }
