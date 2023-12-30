@@ -1,10 +1,10 @@
 #ifndef ConsentiumThingsDalton_h
 #define ConsentiumThingsDalton_h
+#include <ArduinoJson.h>
 
 #if defined(ESP32)
     #include <WiFi.h>
-    #include <HTTPClient.h> 
-    #include <ArduinoJson.h>
+    #include <HTTPClient.h>    
     #define ledPin 23
 
     #define S_0 21
@@ -19,7 +19,6 @@
     #include <ESP8266WiFi.h>
     #include <ESP8266HTTPClient.h>
     #include <WiFiClientSecure.h>
-    #include <ArduinoJson.h>
 
     #define ledPin 16
             
@@ -35,7 +34,6 @@
     #include <WiFi.h>
     #include <HTTPClient.h>
     #include <WiFiClientSecure.h>
-    #include <ArduinoJson.h>
     
     #define ledPin LED_BUILTIN
 
