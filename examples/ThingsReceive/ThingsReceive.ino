@@ -7,8 +7,6 @@
   
   Connect a LED to GPIO 16 for ESP 8266, GPIO 23 for ESP 32 and GPIO 25 for Raspberry Pi Pico W to indicate the REST events. 
   
-  Connect analog devices to A0 for ESP 8266, GPIO 34 for ESP 32 and GPIO 26 for Raspberry Pi Pico W using alias ADC_IN. 
-
   Written by Debjyoti Chowdhury for Consentium.
   MIT license, all text above must be included in any redistribution
  ****************************************************/
@@ -21,23 +19,30 @@ ConsentiumThings board; // Create ConsentiumThings object
 const char *ssid = "YOUR_WIFI_SSID"; // Add WiFi SSID
 const char *pass = "YOUR_WIFI_PASSWORD"; // Add WiFi password
 constexpr int interval = 7000; // Wait for 7 seconds
-const char *SendApiKey = "YOUR_API_KEY"; // Send API key
+const char *ReceiveApiKey = "YOUR_API_KEY"; // Receive API key
 const char *BoardApiKey = "YOUR_BOARD_API_KEY"; // Board API key
 
 void setup() {
-  board.beginSend(SendApiKey, BoardApiKey); // Initialize IoT board
+  board.beginReceive(ReceiveApiKey, BoardApiKey); // Initialize IoT board to receive data
   board.initWiFi(ssid, pass); // Begin WiFi connection
 }
 
 void loop(){
-  double data_0 = board.busRead(0);  // read voltage data
+  // get sensor data from server
+  auto dataPairs = board.receiveREST(); 
   
-  double sensorValues[] = {data_0};  // sensor data array
-  const char* sensorInfo[] = {"Temperature"}; // sensor info. array
-  
-  int sensorCount = sizeof(sensorValues)/sizeof(sensorValues[0]); // number of sensors connected 
-  
-  board.sendREST(sensorValues, sensorInfo, sensorCount, LOW_PRE); // send over REST with delay with desired prescision
+  //print sensor data from server
+  for(size_t i=0; i<dataPairs.size(); i++){
+    double data = dataPairs[i].first; 
+    String info = dataPairs[i].second.c_str();
+
+    Serial.print("Data: ");
+    Serial.print(data);
+    Serial.print("          \t");
+    Serial.print("Info: ");
+    Serial.println(info);
+  }
+  Serial.println();
 
   delay(interval);
 }
