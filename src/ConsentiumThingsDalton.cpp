@@ -2,9 +2,6 @@
 #include <certs/ServerCertificates.h>
 #include <utils/ConsentiumEssentials.h>
 
-WiFiClientSecure client;
-HTTPClient http;
-
 #if defined(ESP8266)
   X509List cert(consentium_root_ca);
 #endif
@@ -41,7 +38,8 @@ void toggleLED() {
     ledState = !ledState;
 }
 
-ConsentiumThings::ConsentiumThings() {}
+ConsentiumThings::ConsentiumThings() : firmwareVersion("0.0") {} // Default constructor without firmware version
+ConsentiumThings::ConsentiumThings(const char* firmware_version) : firmwareVersion(firmware_version) {} //Constructor when firmware version is passed
 
 // Function for sending URL
 void ConsentiumThings::beginSend(const char* key, const char* board_id) {
@@ -89,6 +87,35 @@ void ConsentiumThings::beginReceive(const char* key, const char* board_id) {
   receiveUrl.concat(String(board_id));
 }
 
+// Function for OTA receiving URL
+void ConsentiumThings::beginOTA(const char* key, const char* board_id) {
+  Serial.begin(ESPBAUD);
+  pinMode(ledPin, OUTPUT);
+    
+  #if defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
+    client.setCACert(consentium_root_ca);
+  #elif defined(ESP8266)
+    syncTime();
+    client.setTrustAnchors(&cert);
+  #endif
+  
+  // create the firmware version URL
+  versionUrl = String(versionURL);
+  versionUrl.reserve(ARRAY_RESERVE);
+  versionUrl.concat("receivekey=");
+  versionUrl.concat(String(key));
+  versionUrl.concat("&boardkey=");
+  versionUrl.concat(String(board_id));
+
+  // create the firmware download URL
+  firmwareUrl = String(firmwareURL);
+  firmwareUrl.reserve(ARRAY_RESERVE);
+  firmwareUrl.concat("receivekey=");
+  firmwareUrl.concat(String(key));
+  firmwareUrl.concat("&boardkey=");
+  firmwareUrl.concat(String(board_id));
+}
+
 
 void ConsentiumThings::initWiFi(const char* ssid, const char* password) {
   WiFi.mode(WIFI_STA);
@@ -113,6 +140,19 @@ float ConsentiumThings::busRead(int j) {
   return analogRead(ADC_IN);
 }
 
+const char* ConsentiumThings::getRemoteFirmwareVersion() {
+  http.begin(versionUrl);
+  //Serial.println(versionUrl); //Debug
+  int httpCode = http.GET();
+  static char versionBuffer[128]; // Assuming version won't exceed 128 characters
+  if (httpCode == 200) {
+    http.getString().toCharArray(versionBuffer, sizeof(versionBuffer));
+    return versionBuffer;
+  } else {
+    return nullptr; // Return nullptr on error
+  }
+}
+
 void ConsentiumThings::sendREST(double sensor_data[], const char* sensor_info[], int sensor_num, int precision) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println(F("WiFi not connected. Cannot send REST request."));
@@ -121,8 +161,8 @@ void ConsentiumThings::sendREST(double sensor_data[], const char* sensor_info[],
 
   DynamicJsonDocument jsonDocument(MAX_JSON_SIZE + sensor_num * MAX_JSON_SENSOR_DATA_SIZE);
 
-  // Create a JSON array for sensor data
-  JsonArray sensorDataArray = jsonDocument["sensors"]["sensorData"].to<JsonArray>();
+  // Create a JSON array for sensor data 
+  JsonArray sensorDataArray = jsonDocument["sensors"].createNestedArray("sensorData");
 
   // Add sensor data dynamically
   for (int i = 0; i < sensor_num; i++) {
@@ -131,7 +171,12 @@ void ConsentiumThings::sendREST(double sensor_data[], const char* sensor_info[],
     sensorData["info"] = sensor_info[i];
     sensorData["data"] = String(sensor_data[i], precision);
   }
-
+  
+  // Create a JSON object for board information
+  JsonObject boardInfo = jsonDocument.createNestedObject("boardInfo");
+  boardInfo["firmwareVersion"] = firmwareVersion;
+  boardInfo["architecture"] = BOARD_TYPE;
+  
   // Serialize the JSON document to a string
   String jsonString;
   serializeJsonPretty(jsonDocument, jsonString);
@@ -204,3 +249,55 @@ std::vector<std::pair<double, String>> ConsentiumThings::receiveREST() {
   
   return result;
 }
+
+void ConsentiumThings::checkAndPerformUpdate() {
+  const char* remoteVersion = getRemoteFirmwareVersion();
+
+  Serial.print(F("Remote version: "));
+  Serial.print(remoteVersion);
+  Serial.print(F(" On-device version: "));
+  Serial.print(firmwareVersion);
+
+  if (strcmp(remoteVersion, firmwareVersion) > 0) {
+
+    Serial.println(F("-> Update available."));
+
+    #if defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
+      httpUpdate.rebootOnUpdate(true); // Remove automatic update
+      t_httpUpdate_return ret = httpUpdate.update(client, firmwareUrl);
+      switch (ret) {
+        case HTTP_UPDATE_FAILED:
+          Serial.printf("HTTP_UPDATE_FAILED Error (%d): %s\n", httpUpdate.getLastError(), httpUpdate.getLastErrorString().c_str());
+          Serial.println(F("Retry in 10 secs!"));
+          delay(10000); // Wait 10 secs before retrying
+          break;
+        case HTTP_UPDATE_OK:
+          Serial.println(F("Updated downloaded"));
+          delay(1000); // Wait a second and restart
+          Serial.println(F("Restarting!"));
+          //ESP.restart();
+          break;
+    #elif defined(ESP8266)
+      ESPhttpUpdate.rebootOnUpdate(true); // Remove automatic update
+      t_httpUpdate_return ret = ESPhttpUpdate.update(client, firmwareUrl);
+      switch (ret) {
+        case HTTP_UPDATE_FAILED:
+          Serial.printf("HTTP_UPDATE_FAILED Error (%d): %s\n", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
+          Serial.println(F("Retry in 10 secs!"));
+          delay(10000); // Wait 10 secs before retrying
+          break;
+        case HTTP_UPDATE_OK:
+          Serial.println(F("Updated downloaded"));
+          delay(1000); // Wait a second and restart
+          Serial.println(F("Restarting!"));
+          //ESP.restart();
+          break;
+    #endif
+
+
+    }
+  } else {
+    Serial.println("-> No update.");
+  }
+}
+
