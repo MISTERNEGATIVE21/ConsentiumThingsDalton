@@ -141,7 +141,7 @@ float ConsentiumThings::busRead(int j) {
 }
 
 const char* ConsentiumThings::getRemoteFirmwareVersion() {
-  http.begin(versionUrl);
+  http.begin(client, versionUrl);
   //Serial.println(versionUrl); //Debug
   int httpCode = http.GET();
   static char versionBuffer[128]; // Assuming version won't exceed 128 characters
