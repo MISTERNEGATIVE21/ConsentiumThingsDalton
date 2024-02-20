@@ -1,6 +1,6 @@
 ## ConsentiumThingsDalton
 
-**Version:** v0.9.1
+**Version:** v0.9.2
 
 **Description:**
 

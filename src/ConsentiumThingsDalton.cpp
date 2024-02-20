@@ -159,7 +159,7 @@ void ConsentiumThings::sendREST(double sensor_data[], const char* sensor_info[],
     return;
   }
 
-  DynamicJsonDocument jsonDocument(MAX_JSON_SIZE + sensor_num * MAX_JSON_SENSOR_DATA_SIZE);
+  JsonDocument jsonDocument;
 
   // Create a JSON array for sensor data 
   JsonArray sensorDataArray = jsonDocument["sensors"].createNestedArray("sensorData");
@@ -212,9 +212,8 @@ std::vector<std::pair<double, String>> ConsentiumThings::receiveREST() {
     Serial.println(F("WiFi not connected. Cannot send REST request."));
     return result;
   }
-  const size_t capacity = JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(1) + 7 * JSON_OBJECT_SIZE(4) + 500;
   
-  DynamicJsonDocument jsonDocument(capacity);
+  JsonDocument jsonDocument;
 
   http.begin(client, receiveUrl);
 
