@@ -21,8 +21,8 @@ const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
 };
 
 void syncTime(){
-    configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-    Serial.print(F("Waiting for NTP time sync: "));
+    configTime(3 * 3600, 0, "time.google.com", "time.windows.com");
+    Serial.println(F("Waiting for NTP time sync: "));
     time_t now = time(nullptr);
     while (now < NTP_SYNC_WAIT) {
       delay(500);
