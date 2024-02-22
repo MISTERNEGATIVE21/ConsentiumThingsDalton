@@ -6,11 +6,6 @@
   X509List cert(consentium_root_ca);
 #endif
 
-struct SensorData {
-  double data;
-  String info;
-};
-
 const int kselect_lines[SELECT_LINES] = {S_0, S_1, S_2, S_3}; // MUX select lines
 
 const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
@@ -21,7 +16,7 @@ const int kMUXtable[MUX_IN_LINES][SELECT_LINES] = {
 };
 
 void syncTime(){
-    configTime(3 * 3600, 0, "time.google.com", "time.windows.com");
+    configTime(5.5 * 3600, 0, "time.google.com", "time.windows.com");
     Serial.println(F("Waiting for NTP time sync: "));
     time_t now = time(nullptr);
     while (now < NTP_SYNC_WAIT) {

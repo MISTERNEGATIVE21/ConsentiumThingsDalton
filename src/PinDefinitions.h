@@ -54,7 +54,7 @@
 
 #define WIFI_DELAY 500
 
-#define NTP_SYNC_WAIT 8 * 3600 * 2
+#define NTP_SYNC_WAIT 60
 
 #define MAX_JSON_SIZE 200
 #define MAX_JSON_SENSOR_DATA_SIZE 50
